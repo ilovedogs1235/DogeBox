@@ -1,0 +1,72 @@
+local random = Random.new()
+local letters = {'a','!','b','@','c','#','d','$','e','%','f','^','g','&','*','h','(','i',')','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}
+
+function getRandomLetter()
+	return letters[random:NextInteger(1,#letters)]
+end
+
+function getRandomString(length, includeCapitals)
+	local length = length or 10
+	local str = ''
+	for i=1,length do
+		local randomLetter = getRandomLetter()
+		if includeCapitals and random:NextNumber() > .5 then
+			randomLetter = string.upper(randomLetter)
+		end
+		str = str .. randomLetter
+	end
+	return str
+end
+
+local esp_settings = {
+    textsize = 8
+}
+
+local gui = Instance.new("BillboardGui")
+local esp = Instance.new("TextLabel",gui)
+
+local gui1 = Instance.new("BillboardGui")
+local esp1 = Instance.new("Frame",gui)
+
+local UINAME_ = getRandomString(12, true)
+
+gui1.Name = UINAME_ .. "1"
+gui1.Size = UDim2.new(1, 0, 1, 0)
+gui1.ResetOnSpawn = false
+gui1.AlwaysOnTop = true
+gui1.LightInfluence = 0
+esp1.Size = UDim2.new(1, 0, 1, 0)
+esp1.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+esp1.BorderSizePixel = 0
+
+gui.Name = UINAME_;
+gui.ResetOnSpawn = false
+gui.AlwaysOnTop = true;
+gui.LightInfluence = 0;
+gui.Size = UDim2.new(1.75, 0, 1.75, 0);
+esp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
+esp.Name = "_27_"
+esp.Text = ""
+esp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
+esp.BorderSizePixel = 4;
+esp.BorderColor3 = Color3.fromRGB(255, 0, 0)
+esp.BorderSizePixel = 0
+esp.Font = "GothamSemibold"
+esp.TextSize = esp_settings.textsize
+esp.TextColor3 = Color3.fromRGB(255, 0, 0)
+
+
+
+coroutine.resume(coroutine.create(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        for i,v in pairs (game:GetService("Players"):GetPlayers()) do
+            if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild(UINAME_) == nil and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+                esp.Text = "["..v.Name..' | '..tostring(v.Team).."]"
+                if v.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+                    gui:Clone().Parent = v.Character.Head
+                    gui1:Clone().Parent = v.Character.HumanoidRootPart
+                end
+            end
+        end
+    end)
+end))

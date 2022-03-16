@@ -1,0 +1,12 @@
+wait()
+for _,j in pairs(script.Parent:GetChildren()) do
+	if j:IsA("Frame") then
+		if (j.Name ~= "SideBar") then
+			if (j.Name == "Home") then
+				j.Visible = true
+			else
+				j.Visible = false
+			end
+		end
+	end
+end

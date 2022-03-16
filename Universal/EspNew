@@ -1,0 +1,154 @@
+-- general esp script --
+-- easy to customize
+-- created by dogebox
+
+_G.espEnabled = false
+local esp_settings = {
+    untextsize = 8,
+    color = Color3.fromRGB(255, 0, 0),
+    teamcheck = false
+}
+
+
+
+
+
+-- vvv !!! dont mess with anything down here !!! vvv ---
+
+
+
+local lplr = game:GetService("Players").LocalPlayer
+local camera = workspace['CurrentCamera']
+local currentcamera = workspace.CurrentCamera
+local worldToViewportPoint = currentcamera.worldToViewportPoint
+
+local headoffset = Vector3.new(0, 0.5, 0)
+local legoffset = Vector3.new(0, -3, 0)
+
+for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+    local squareOut = Drawing.new("Square")
+    squareOut.Visible = false
+    squareOut.Color = esp_settings.color
+    squareOut.Thickness = 3
+    squareOut.Transparency = 1
+    squareOut.Filled = false
+    local squareIn = Drawing.new("Square")
+    squareIn.Visible = false
+    squareIn.Color = esp_settings.color
+    squareIn.Thickness = 1
+    squareIn.Transparency = 1
+    squareIn.Filled = false
+    function runesp()
+        local RunService = game:GetService("RunService")
+        RunService.RenderStepped:connect(function()
+            if _G.espEnabled then
+                squareOut.Visible = true
+                squareIn.Visible = true
+            else
+                squareOut.Visible = false
+                squareIn.Visible = false
+            end
+            if v.Character ~= nil and v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("HumanoidRootPart") ~= nil and v ~= lplr and v.Character.Humanoid.Health > 0 then
+                local _s = false
+                if esp_settings.teamcheck == true then
+                    if (v.TeamColor == lplr.TeamColor) then
+                        _s = true
+                    end
+                end
+                if _s == false then
+                    local vector, onScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                    local rootpart = v.Character.HumanoidRootPart
+                    local head = v.Character.Head
+                    local rootpos, rootvis = worldToViewportPoint(currentcamera, rootpart.Position)
+                    local headpos = worldToViewportPoint(currentcamera, head.Position + headoffset)
+                    local legpos = worldToViewportPoint(currentcamera, rootpart.Position + legoffset)
+                    
+                    if onScreen then
+                        squareOut.Size = Vector2.new(1000 / rootpos.Z, headpos.Y - legpos.Y)
+                        squareOut.Position = Vector2.new(rootpos.X - squareOut.Size.X / 2, rootpos.Y - squareOut.Size.Y / 2)
+                        if _G.espEnabled == true then
+                            squareOut.Visible = true
+                        else
+                            squareOut.Visible = false
+                        end
+                        
+                        squareIn.Size = Vector2.new(1000 / rootpos.Z, headpos.Y - legpos.Y)
+                        squareIn.Position = Vector2.new(rootpos.X - squareIn.Size.X / 2, rootpos.Y - squareIn.Size.Y / 2)
+                        if _G.espEnabled == true then
+                            squareIn.Visible = true
+                        else
+                            squareOut.Visible = false
+                        end
+                    else
+                        squareOut.Visible = false
+                        squareIn.Visible = false
+                    end
+                end
+            else
+                squareOut.Visible = false
+                squareIn.Visible = false
+            end
+        end)
+    end
+    coroutine.wrap(runesp)()
+end
+game:GetService("Players").PlayerAdded:connect(function(v)
+    local squareOut = Drawing.new("Square")
+    squareOut.Visible = false
+    squareOut.Color = esp_settings.color
+    squareOut.Thickness = 3
+    squareOut.Transparency = 1
+    squareOut.Filled = false
+    local squareIn = Drawing.new("Square")
+    squareIn.Visible = false
+    squareIn.Color = esp_settings.color
+    squareIn.Thickness = 1
+    squareIn.Transparency = 1
+    squareIn.Filled = false
+    function runesp()
+        local RunService = game:GetService("RunService")
+        RunService.RenderStepped:connect(function()
+            if v.Character ~= nil and v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("HumanoidRootPart") ~= nil and v ~= lplr and v.Character.Humanoid.Health > 0 then
+                local _s = false
+                if esp_settings.teamcheck == true then
+                    if (v.TeamColor == lplr.TeamColor) then
+                        _s = true
+                    end
+                end
+                if _s == false then
+                    local vector, onScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                    local rootpart = v.Character.HumanoidRootPart
+                    local head = v.Character.Head
+                    local rootpos, rootvis = worldToViewportPoint(currentcamera, rootpart.Position)
+                    local headpos = worldToViewportPoint(currentcamera, head.Position + headoffset)
+                    local legpos = worldToViewportPoint(currentcamera, rootpart.Position + legoffset)
+                    
+                    if onScreen then
+                        squareOut.Size = Vector2.new(1000 / rootpos.Z, headpos.Y - legpos.Y)
+                        squareOut.Position = Vector2.new(rootpos.X - squareOut.Size.X / 2, rootpos.Y - squareOut.Size.Y / 2)
+                        if _G.espEnabled == true then
+                            squareOut.Visible = true
+                        else
+                            squareOut.Visible = false
+                        end
+                        
+                        squareIn.Size = Vector2.new(1000 / rootpos.Z, headpos.Y - legpos.Y)
+                        squareIn.Position = Vector2.new(rootpos.X - squareIn.Size.X / 2, rootpos.Y - squareIn.Size.Y / 2)
+                        if _G.espEnabled == true then
+                            squareIn.Visible = true
+                        else
+                            squareOut.Visible = false
+                        end
+                    else
+                        squareOut.Visible = false
+                        squareIn.Visible = false
+                    end
+                end
+            else
+                squareOut.Visible = false
+                squareIn.Visible = false
+            end
+        end)
+    end
+    coroutine.wrap(runesp)()
+end)

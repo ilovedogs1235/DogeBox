@@ -1,0 +1,193 @@
+--[[
+
+   ______      _ __  __     __               
+  / ____/_  __(_) / / /__  / /___  ___  _____
+ / / __/ / / / / /_/ / _ \/ / __ \/ _ \/ ___/
+/ /_/ / /_/ / / __  /  __/ / /_/ /  __/ /    
+\____/\__,_/_/_/ /_/\___/_/ .___/\___/_/     
+                         /_/                 
+
+]]--
+
+function round(instance, scale)
+	coroutine.resume(coroutine.create(function()
+		local UICorner = Instance.new("UICorner", instance)
+		wait()
+		UICorner.CornerRadius = UDim.new(0, tonumber(scale))
+	end))
+end
+
+function center(instance)
+	coroutine.resume(coroutine.create(function()
+		instance.Position = UDim2.new(0.5, 0, 0.5, 0)
+		instance.AnchorPoint = Vector2.new(0.5, 0.5)
+	end))
+end
+
+function bubble(instance, color, dur, igi)
+	coroutine.resume(coroutine.create(function()
+		local mouse = game:GetService("UserInputService"):GetMouseLocation()
+		local frame = Instance.new("Frame", instance)
+		local round = Instance.new("UICorner", frame)
+		local pos = mouse - instance.AbsolutePosition
+		local pee = instance.ClipsDescendants
+		round.CornerRadius = UDim.new(1.2, 20)
+		frame.Name = "bubble-frame"
+		frame.Visible = false
+		frame.Size = UDim2.new(0.016, 0, 0.016, 0)
+		if igi then
+			frame.Position = UDim2.new(0, pos.X, 0, pos.Y)
+		else
+			frame.Position = UDim2.new(0, pos.X, 0, pos.Y - 36)
+		end
+		frame.AnchorPoint = Vector2.new(0.5, 0.5)
+		frame.BorderSizePixel = 0
+		frame.BackgroundColor3 = color
+		frame.Transparency = 0.15
+		frame.Visible = true
+		instance.ClipsDescendants = true
+		coroutine.resume(coroutine.create(function()
+			frame:TweenSize(UDim2.new(2.5, 0, 5.016, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, dur)
+		end))
+		coroutine.resume(coroutine.create(function()
+			while wait(dur / 1000) do
+				frame.Transparency = frame.Transparency + 0.1
+			end
+		end))
+		wait(dur + 0.5)
+		frame:Destroy()
+		coroutine.resume(coroutine.create(function()
+			repeat wait(); until instance:FindFirstChild("bubble-frame") == nil
+			instance.ClipsDescendants = pee
+		end))
+	end))
+end
+
+function fadeout(instance)
+	coroutine.resume(coroutine.create(function()
+		if (instance:IsA("TextLabel") or instance:IsA("TextButton")) then
+			coroutine.resume(coroutine.create(function()
+				if (instance.TextStrokeTransparency == 0) then
+					for i = 1, instance.BackgroundTransparency do
+						instance.TextTransparency = instance.TextTransparency - 0.1
+						instance.TextStrokeTransparency = instance.TextStrokeTransparency - 0.1
+						instance.BackgroundTransparency = instance.BackgroundTransparency - 0.1
+						wait(.000000001)
+					end
+				else
+					for i = 1, instance.TextTransparency do
+						instance.TextTransparency = instance.TextTransparency - 0.1
+						instance.BackgroundTransparency = instance.BackgroundTransparency - 0.1
+						wait(.000000001)
+					end
+				end
+			end))
+		elseif (instance:IsA("Frame")) then
+			coroutine.resume(coroutine.create(function()
+				for i = 1, instance.BackgroundTransparency do
+					instance.BackgroundTransparency = instance.BackgroundTransparency - 0.1
+					wait(.000000001)
+				end
+			end))
+		elseif (instance:IsA("ImageLabel") or instance:IsA("ImageButton")) then
+			coroutine.resume(coroutine.create(function()
+				for i = 1, instance.BackgroundTransparency do
+					instance.BackgroundTransparency = instance.BackgroundTransparency - 0.1
+					instance.ImageTransparency = instance.ImageTransparency - 0.1
+					wait(.000000001)
+				end
+			end))
+		end
+	end))
+end
+
+function fadein(instance)
+	coroutine.resume(coroutine.create(function()
+		if (instance:IsA("TextLabel") or instance:IsA("TextButton")) then
+			coroutine.resume(coroutine.create(function()
+				if (instance.TextStrokeTransparency == 0) then
+					for i = 1, instance.BackgroundTransparency do
+						instance.TextTransparency = instance.TextTransparency + 0.1
+						instance.TextStrokeTransparency = instance.TextStrokeTransparency + 0.1
+						instance.BackgroundTransparency = instance.BackgroundTransparency + 0.1
+						wait(.000000001)
+					end
+				else
+					for i = 1, instance.TextTransparency do
+						instance.TextTransparency = instance.TextTransparency + 0.1
+						instance.BackgroundTransparency = instance.BackgroundTransparency + 0.1
+						wait(.000000001)
+					end
+				end
+			end))
+		elseif (instance:IsA("Frame")) then
+			coroutine.resume(coroutine.create(function()
+				for i = 1, instance.BackgroundTransparency do
+					instance.BackgroundTransparency = instance.BackgroundTransparency + 0.1
+					wait(.000000001)
+				end
+			end))
+		elseif (instance:IsA("ImageLabel") or instance:IsA("ImageButton")) then
+			coroutine.resume(coroutine.create(function()
+				for i = 1, instance.BackgroundTransparency do
+					instance.BackgroundTransparency = instance.BackgroundTransparency + 0.1
+					instance.ImageTransparency = instance.ImageTransparency + 0.1
+					wait(.000000001)
+				end
+			end))
+		end
+	end))
+end
+
+function actasbubble(instance, color, dur, igi)
+	coroutine.resume(coroutine.create(function()
+		local mouse = game:GetService("UserInputService"):GetMouseLocation()
+		local frame = instance
+		local round = Instance.new("UICorner", frame)
+		local pos = mouse - instance.AbsolutePosition
+		local pee = instance.ClipsDescendants
+		round.CornerRadius = UDim.new(1.2, 20)
+		frame.Name = "bubble-frame"
+		frame.Visible = false
+		frame.Size = UDim2.new(0.016, 0, 0.016, 0)
+		if igi then
+			frame.Position = UDim2.new(0, pos.X, 0, pos.Y)
+		else
+			frame.Position = UDim2.new(0, pos.X, 0, pos.Y - 36)
+		end
+		frame.AnchorPoint = Vector2.new(0.5, 0.5)
+		frame.BorderSizePixel = 0
+		frame.BackgroundColor3 = color
+		frame.Transparency = 0.15
+		frame.Visible = true
+		instance.ClipsDescendants = true
+		coroutine.resume(coroutine.create(function()
+			frame:TweenSize(UDim2.new(2.5, 0, 5.016, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, dur)
+		end))
+		coroutine.resume(coroutine.create(function()
+			while wait(dur / 1000) do
+				frame.Transparency = frame.Transparency + 0.1
+			end
+		end))
+		wait(dur + 0.5)
+		coroutine.resume(coroutine.create(function()
+			repeat wait(); until instance:FindFirstChild("bubble-frame") == nil
+			instance.ClipsDescendants = pee
+		end))
+	end))
+end
+
+for _,j in pairs(script.Parent:GetChildren()) do
+	if (j:IsA("TextButton")) then
+		coroutine.resume(coroutine.create(function()
+			spawn(function()
+				local fakeScript = Instance.new("IntValue", j)
+				fakeScript.Name = "fakeScriptNew"; wait()
+				script = fakeScript
+				bubble(script.Parent, Color3.fromRGB(45, 45, 45), 1.25, false)
+			end)
+		end))
+	end
+end
+wait(2)
+script:Destroy()
